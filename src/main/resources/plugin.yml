@@ -1,0 +1,14 @@
+name: Backup
+version: '${project.version}'
+main: de.kevrecraft.backup.Backup
+api-version: '1.20'
+
+commands:
+  backup:
+    description: Backup
+    permission: backup
+    permission-message: Du darfst das nicht tun!
+  teleport:
+    description: teleport
+    permission: teleport
+    permission-message: Du darfst das nicht tun!
