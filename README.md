@@ -26,4 +26,4 @@ Vergiss nicht, das Repository zu starren, um auf dem Laufenden zu bleiben, und l
 Alle Befehle beinhalten einen TabCompleter, somit ist das Eingeben der richtigen Argumente für jeden vereinfacht.
 
 ## Installation:
-Du möchtest das Plugin testen? Kein Problem lade die [Backup.jar](https://github.com/KevReLP/BackupSystem/blob/b6d18a120c908f24f2e9b8ec4f7626478005d14c/server/plugins) in server/plugins herunter und schiebe diese Datei in deinen Server Plugins Ordner und Starte deinen Server neu.
+Du möchtest das Plugin testen? Kein Problem lade die [Backup.jar](https://github.com/KevReLP/BackupSystem/server/plugins) in server/plugins herunter und schiebe diese Datei in deinen Server Plugins Ordner und Starte deinen Server neu.
