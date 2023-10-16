@@ -1,6 +1,7 @@
 package de.kevrecraft.backup.commands;
 
 import de.kevrecraft.backup.BackupManager;
+import de.kevrecraft.backup.utilitys.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -89,6 +90,78 @@ public class BackupCommand implements CommandExecutor {
                     return true;
                 }
             }
+        } else if(args.length == 4) {
+            if(args[0].equalsIgnoreCase("autobackup")) {
+                if (args[1].equalsIgnoreCase("set")) {
+                    if(args[2].equalsIgnoreCase("timer")) {
+                        if(Utility.isInt(args[3])) {
+                            long time = Long.parseLong(args[3]) * 60 * 60 * 20;
+                            pluigin.setAutobackupTimer(time);
+                            pluigin.getConfig().set("autobackup.h", Integer.parseInt(args[3]));
+                            sender.sendMessage("Der Autobackuptimer wurde auf " + args[3] + " geändert!");
+                            return true;
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Die eingegebene Stundenzahl " + args[3] + " ist keine Gültige Zahl!");
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if(args.length == 5) {
+            if(args[0].equalsIgnoreCase("autobackup")) {
+                if (args[1].equalsIgnoreCase("set")) {
+                    if(args[2].equalsIgnoreCase("timer")) {
+                        if(Utility.isInt(args[3])) {
+                            if(Utility.isInt(args[4])) {
+                                long time = Long.parseLong(args[3]) * 60 * 60 * 20;
+                                time += Long.parseLong(args[4]) * 60 * 20;
+                                pluigin.setAutobackupTimer(time);
+                                pluigin.getConfig().set("autobackup.h", Integer.parseInt(args[3]));
+                                pluigin.getConfig().set("autobackup.m", Integer.parseInt(args[4]));
+                                sender.sendMessage("Der Autobackuptimer wurde auf " + args[3] + "h und " + args[4] + "m geändert!");
+                                return true;
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "Die eingegebene Minutenzahl " + args[4] + " ist keine Gültige Zahl!");
+                                return true;
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Die eingegebene Stundenzahl " + args[3] + " ist keine Gültige Zahl!");
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if(args.length == 6) {
+            if(args[0].equalsIgnoreCase("autobackup")) {
+                if (args[1].equalsIgnoreCase("set")) {
+                    if(args[2].equalsIgnoreCase("timer")) {
+                        if(Utility.isInt(args[3])) {
+                            if(Utility.isInt(args[4])) {
+                                if(Utility.isInt(args[5])) {
+                                    long time = Long.parseLong(args[3]) * 60 * 60 * 20;
+                                    time += Long.parseLong(args[4]) * 60 * 20;
+                                    time += Long.parseLong(args[5]) * 20;
+                                    pluigin.setAutobackupTimer(time);
+                                    pluigin.getConfig().set("autobackup.h", Integer.parseInt(args[3]));
+                                    pluigin.getConfig().set("autobackup.m", Integer.parseInt(args[4]));
+                                    pluigin.getConfig().set("autobackup.s", Integer.parseInt(args[5]));
+                                    sender.sendMessage("Der Autobackuptimer wurde auf " + args[3] + "h und " + args[4] + "m " + args[5] + "s geändert!");
+                                    return true;
+                                } else {
+                                    sender.sendMessage(ChatColor.RED + "Die eingegebene Sekundenzahl " + args[5] + " ist keine Gültige Zahl!");
+                                    return true;
+                                }
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "Die eingegebene Minutenzahl " + args[4] + " ist keine Gültige Zahl!");
+                                return true;
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Die eingegebene Stundenzahl " + args[3] + " ist keine Gültige Zahl!");
+                            return true;
+                        }
+                    }
+                }
+            }
         }
 
         sender.sendMessage(ChatColor.RED + "Fehler: Benutze " + ChatColor.GRAY + "/backup help" + ChatColor.RED + " für eine Hilfe!");
@@ -105,5 +178,6 @@ public class BackupCommand implements CommandExecutor {
         }
         sender.sendMessage( commandColor + "/backup save <world>" + color + " -> Startet ein Backup für die Welt, die du angegeben hast.");
         sender.sendMessage( commandColor + "/backup load <world> <date>" + color + " -> Ladet ein entsprechendes backup...");
+        sender.sendMessage( commandColor + "/backup autobackup set timer <h> <m> <s>" + color + " -> Setzt die entsprechende intervalle der Zeit...");
     }
 }

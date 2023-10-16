@@ -13,12 +13,30 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Backup extends JavaPlugin implements Listener {
 
     private int autobackupID = -1;
+    private long lastBackupTime;
 
-    public void setAutoBackupTimer(long start, long timer) {
+
+    private void setAutoBackupTimer(long start, long timer) {
         if(autobackupID != -1) {
             Bukkit.getScheduler().cancelTask(autobackupID);
         }
         autobackupID = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AutoBackupRunnable(this), start, timer).getTaskId();
+        lastBackupTime = System.currentTimeMillis();
+    }
+
+    public void setAutobackupTimer(long timer) {
+        if(autobackupID != -1) {
+            Bukkit.getScheduler().cancelTask(autobackupID);
+        }
+        long start = System.currentTimeMillis() - lastBackupTime;
+        start = start / 1000 * 20;
+
+        if(start >= timer) {
+            autobackupID = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AutoBackupRunnable(this), 0, timer).getTaskId();
+        } else {
+            autobackupID = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AutoBackupRunnable(this), timer-start, timer).getTaskId();
+        }
+        lastBackupTime = System.currentTimeMillis();
     }
 
 
@@ -42,6 +60,6 @@ public final class Backup extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-
+        this.saveConfig();
     }
 }
