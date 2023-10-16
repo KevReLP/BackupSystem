@@ -15,7 +15,6 @@ public final class Backup extends JavaPlugin implements Listener {
     private int autobackupID = -1;
     private long lastBackupTime;
 
-
     private void setAutoBackupTimer(long start, long timer) {
         if(autobackupID != -1) {
             Bukkit.getScheduler().cancelTask(autobackupID);

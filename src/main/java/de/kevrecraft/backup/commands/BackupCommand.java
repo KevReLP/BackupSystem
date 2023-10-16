@@ -145,7 +145,7 @@ public class BackupCommand implements CommandExecutor {
                                     pluigin.getConfig().set("autobackup.h", Integer.parseInt(args[3]));
                                     pluigin.getConfig().set("autobackup.m", Integer.parseInt(args[4]));
                                     pluigin.getConfig().set("autobackup.s", Integer.parseInt(args[5]));
-                                    sender.sendMessage("Der Autobackuptimer wurde auf " + args[3] + "h und " + args[4] + "m " + args[5] + "s geändert!");
+                                    sender.sendMessage("Der Autobackuptimer wurde auf " + args[3] + "h, " + args[4] + "m und " + args[5] + "s geändert!");
                                     return true;
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "Die eingegebene Sekundenzahl " + args[5] + " ist keine Gültige Zahl!");
