@@ -4,13 +4,17 @@ import de.kevrecraft.backup.utilitys.Utility;
 import de.kevrecraft.backup.utilitys.WorldHandler;
 import de.kevrecraft.backup.utilitys.ZipHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class BackupManager {
     private static final File folder = new File("backups");
@@ -78,7 +82,22 @@ public class BackupManager {
         }
     }
 
+    private static ArrayList<String> isLoading = new ArrayList<>();
+
+    public static boolean isLoading(String worldName) {
+        return isLoading.contains(worldName);
+    }
+    private static HashMap<UUID, Location> playerLocs = new HashMap<>();
+
     public static void load(String worldName, String zipName) {
+        isLoading.add(worldName);
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if(player.getWorld().getName().equals(worldName)) {
+                playerLocs.put(player.getUniqueId(), player.getLocation());
+                player.teleport(new Location(Bukkit.getWorld("load_world"), 0.5, 1 ,0.5));
+            }
+        }
+
         File zipFile = new File(folder + "/" + worldName, zipName + ".zip");
         WorldHandler wh = new WorldHandler(worldName);
         if(wh.exist()) {
@@ -93,7 +112,12 @@ public class BackupManager {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        isLoading.remove(worldName);
+        for (UUID uuid : playerLocs.keySet()){
+            if(playerLocs.get(uuid).getWorld().getName().equals(worldName)) {
+                Bukkit.getPlayer(uuid).teleport(playerLocs.get(uuid));
+            }
+        }
     }
 
     private static void copy(File source, File target) throws IOException {

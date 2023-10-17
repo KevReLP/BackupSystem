@@ -18,6 +18,7 @@ public class BackupTabCompleter implements TabCompleter {
             list.add("help");
             list.add("save");
             list.add("load");
+            list.add("autobackup");
             return list;
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("save")) {
@@ -28,11 +29,20 @@ public class BackupTabCompleter implements TabCompleter {
                 return list;
             } else if (args[0].equalsIgnoreCase("load")) {
                 return BackupManager.getBackpsFolder();
+            } else if (args[0].equalsIgnoreCase("autobackup")) {
+                ArrayList<String> list = new ArrayList<>();
+                list.add("set");
+                return list;
             }
 
         } else if (args.length == 3) {
             if(args[0].equalsIgnoreCase("load"))
                 return BackupManager.getBackups(args[1]);
+            else if (args[0].equalsIgnoreCase("autobackup") && args[1].equalsIgnoreCase("set")) {
+                ArrayList<String> list = new ArrayList<>();
+                list.add("timer");
+                return list;
+            }
         }
 
         return new ArrayList<>();
