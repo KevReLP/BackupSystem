@@ -21,6 +21,7 @@ public final class Backup extends JavaPlugin implements Listener {
         }
         autobackupID = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new AutoBackupRunnable(this), start, timer).getTaskId();
         lastBackupTime = System.currentTimeMillis();
+
     }
 
     public void setAutobackupTimer(long timer) {

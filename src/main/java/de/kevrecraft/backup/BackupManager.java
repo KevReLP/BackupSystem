@@ -126,8 +126,8 @@ public class BackupManager implements Listener {
         }
     }
 
-    private static File playerDataFile = new File("/plugins/Backup/player.data");
-    private static YamlConfiguration config;
+    private static File playerDataFile;
+    private static YamlConfiguration config = new YamlConfiguration();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -141,6 +141,7 @@ public class BackupManager implements Listener {
 
     public static void onEnable(Backup plugin) {
         try {
+            playerDataFile = new File(plugin.getDataFolder().getAbsolutePath(), "player.data");
             if(!playerDataFile.exists())
                 playerDataFile.createNewFile();
             config.load(playerDataFile);
@@ -159,6 +160,11 @@ public class BackupManager implements Listener {
     public static void onDiesable() {
         for(UUID key : playerLocs.keySet()) {
             config.set(key.toString(), playerLocs.get(key));
+        }
+        try {
+            config.save(playerDataFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
