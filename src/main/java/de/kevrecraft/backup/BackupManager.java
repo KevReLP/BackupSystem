@@ -6,7 +6,12 @@ import de.kevrecraft.backup.utilitys.ZipHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
@@ -16,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class BackupManager {
+public class BackupManager implements Listener {
     private static final File folder = new File("backups");
 
     public static File getFolder() {
@@ -116,7 +121,44 @@ public class BackupManager {
         for (UUID uuid : playerLocs.keySet()){
             if(playerLocs.get(uuid).getWorld().getName().equals(worldName)) {
                 Bukkit.getPlayer(uuid).teleport(playerLocs.get(uuid));
+                playerLocs.remove(uuid);
             }
+        }
+    }
+
+    private static File playerDataFile = new File("/plugins/Backup/player.data");
+    private static YamlConfiguration config;
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if(playerLocs.get(event.getPlayer().getUniqueId()) != null) {
+            if(!isLoading(playerLocs.get(event.getPlayer().getUniqueId()).getWorld().getName())) {
+                event.getPlayer().teleport(playerLocs.get(event.getPlayer().getUniqueId()));
+                playerLocs.remove(event.getPlayer().getUniqueId());
+            }
+        }
+    }
+
+    public static void onEnable(Backup plugin) {
+        try {
+            if(!playerDataFile.exists())
+                playerDataFile.createNewFile();
+            config.load(playerDataFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+
+        for(String key : config.getKeys(false)) {
+            playerLocs.put(UUID.fromString(key), config.getLocation(key));
+            config.set(key, null);
+        }
+
+        plugin.getServer().getPluginManager().registerEvents(new BackupManager(), plugin);
+    }
+
+    public static void onDiesable() {
+        for(UUID key : playerLocs.keySet()) {
+            config.set(key.toString(), playerLocs.get(key));
         }
     }
 

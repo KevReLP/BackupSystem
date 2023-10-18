@@ -51,6 +51,8 @@ public final class Backup extends JavaPlugin implements Listener {
         WorldHandler wh = new WorldHandler("load_world");
         wh.loadEmpty();
 
+        BackupManager.onEnable(this);
+
         Long time = getConfig().getLong("autobackup.s") * 20l;
         time += getConfig().getLong("autobackup.m") * 20l * 60;
         time += getConfig().getLong("autobackup.h") * 20l * 60 * 60;
@@ -60,5 +62,6 @@ public final class Backup extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         this.saveConfig();
+        BackupManager.onDiesable();
     }
 }
