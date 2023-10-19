@@ -15,13 +15,14 @@ public class AutoBackupRunnable implements Runnable {
 
     @Override
     public void run() {
-        for(World world : Bukkit.getWorlds()) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    BackupManager.backup(world);
-                }
-            });
-        }
+        if(plugin.getConfig().getBoolean("autobackup.enabled"))
+            for(World world : Bukkit.getWorlds()) {
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        BackupManager.backup(world);
+                    }
+                });
+            }
     }
 }

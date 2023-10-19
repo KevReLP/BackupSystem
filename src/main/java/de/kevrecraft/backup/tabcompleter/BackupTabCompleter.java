@@ -41,6 +41,7 @@ public class BackupTabCompleter implements TabCompleter {
             else if (args[0].equalsIgnoreCase("autobackup") && args[1].equalsIgnoreCase("set")) {
                 ArrayList<String> list = new ArrayList<>();
                 list.add("timer");
+                list.add("enabled");
                 return list;
             }
         }
